@@ -23,7 +23,7 @@ module.exports = {
       // **optional**
       // Where is TypeScript config file in the project?
       // It is relative to root property.
-      tsconfig: "./tsconfig.json",
+      tsconfig: "./jsconfig.json",
     },
   ],
 };
