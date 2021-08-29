@@ -54,7 +54,7 @@ async function wait(time) {
  * @return {Promise<string>}
  */
 async function pollForDownloadSignedURL(getDownloadSignedURL) {
-    const maxTime = Date.now() + 2 * 60 * 1000; // 2 minutes
+    const maxTime = Date.now() + (1 * 60 * 1000); // 1 minute
     const period = 10 * 1000; // 10 seconds polling
 
     do {

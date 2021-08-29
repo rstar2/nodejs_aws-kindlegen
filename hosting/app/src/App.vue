@@ -4,13 +4,13 @@
 
     <Auth @change="onAuth" />
 
-
     <FileSelect
       :disabled="isConverting"
       @select="onFileSelect"
       class="fileselect"
     >
-      <p v-if="isConverting">Converting {{ file.name }} <Spinner/></p>
+      <p v-if="isConverting">Converting {{ file.name }} <Spinner /></p>
+      <p v-else-if="error"> {{ error }} </p>
       <p v-else>
         Drag your file here
         <br />
@@ -26,10 +26,10 @@
 </template>
 
 <script>
-import Spinner from './components/Spinner.vue';
-import Button from './components/Button.vue';
-import Auth from './components/Auth.vue';
-import FileSelect from './components/FileSelect.vue';
+import Spinner from "./components/Spinner.vue";
+import Button from "./components/Button.vue";
+import Auth from "./components/Auth.vue";
+import FileSelect from "./components/FileSelect.vue";
 
 import { convert } from "./services/convert.js";
 
@@ -57,12 +57,17 @@ export default {
        * The converting state
        */
       isConverting: false,
+
+      error: "",
     };
   },
   computed: {
+    /**
+     * @return {boolean}
+     */
     canConvert() {
       return this.isAuth && this.file && !this.isConverting;
-    }
+    },
   },
   methods: {
     onAuth(isAuth) {
@@ -73,22 +78,23 @@ export default {
     },
     convert() {
       this.isConverting = true;
-      const file = this.file;
-      convert(file)
+      this.error = "";
+      convert(this.file)
         .then(() => {
           console.log(`Convert ${this.file.name} finished`);
         })
-        .catch(err => {
-          // TODO: show error
-          console.error(`Convert ${this.file.name} failed`, err);
+        .catch((err) => {
+          // show error
+          this.error = `Convert ${this.file.name} failed`;
+          console.error(this.error, err);
         })
         .then(() => this.reset());
     },
     reset() {
       this.file = undefined;
       this.isConverting = false;
-    }
-  }
+    },
+  },
 };
 </script>
 

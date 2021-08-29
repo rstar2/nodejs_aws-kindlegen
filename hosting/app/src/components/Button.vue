@@ -62,5 +62,6 @@
 .bn9:disabled {
     cursor: default;
     background: dimgrey;
+    opacity: 0.4;
 }
 </style>
