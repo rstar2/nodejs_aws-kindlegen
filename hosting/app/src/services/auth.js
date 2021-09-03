@@ -24,7 +24,8 @@ export default {
             domain: AUTH0_DOMAIN,
             client_id: AUTH0_CLIENT_ID,
 
-            // NOTE: the silent re-authentication is not working in Chrome with the default cookies store
+            // NOTE: the silent re-authentication is not working in Chrome
+            // with the default cookies store when there's "Privacy Badger" extension installed
             // so "localstorage" had to be used
             // see https://community.auth0.com/t/why-is-authentication-lost-after-refreshing-my-single-page-application/56276
             useRefreshTokens: true,
