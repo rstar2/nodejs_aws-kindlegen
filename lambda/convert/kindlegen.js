@@ -7,15 +7,21 @@ const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
 
 const kindlegen = async (record) => {
+    // Object key may have spaces or unicode non-ASCII characters.
+    const key    = decodeURIComponent(record.s3.object.key.replace(/\+/g, " "));
+
+    console.log('getObject', key);
     // get the file
+
     const s3Object = await s3
         .getObject({
             Bucket: record.s3.bucket.name,
-            Key: record.s3.object.key
+            Key: key
         })
         .promise();
+        console.log('getObject  - success', key);
 
-    const inFilePath = `/tmp/${record.s3.object.key}`;
+    const inFilePath = `/tmp/${key}`;
 
     // replace the extension (if any) with '.mobi'
     const outFilePath = path.join(path.dirname(inFilePath),
@@ -63,11 +69,12 @@ const kindlegen = async (record) => {
         console.error(e);
     }
 
+    console.log('putObject', `${key}.mobi`);
     // upload the 'mobi' file to s3
     await s3
         .putObject({
             Bucket: record.s3.bucket.name,
-            Key: `${record.s3.object.key}.mobi`,
+            Key: `${key}.mobi`,
             Body: mobiFile
         })
         .promise();
